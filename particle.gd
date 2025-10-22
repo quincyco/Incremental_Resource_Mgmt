@@ -14,6 +14,8 @@ var is_moving_to_collector: bool = false
 var move_speed: float = 400.0
 
 func _ready():
+	add_to_group("particles")  # CRITICAL FIX: Add to group in code
+	
 	game_manager = get_node("/root/Main/GameManager")
 	value = game_manager.particle_value
 	
@@ -21,15 +23,15 @@ func _ready():
 	lifetime_timer.timeout.connect(_on_lifetime_timeout)
 	lifetime_timer.start(10.0)  # Particles disappear after 10 seconds
 	
-	# Setup placeholder sprite
-	if not sprite:
-		sprite = Sprite2D.new()
-		add_child(sprite)
+	# Setup placeholder sprite if no texture
+	if not sprite.texture:
 		_create_placeholder_texture()
 	
 	# Physics properties
 	gravity_scale = 0.5
 	linear_damp = 2.0
+	
+	print("Particle created at: ", global_position)
 
 func _create_placeholder_texture() -> void:
 	var img = Image.create(16, 16, false, Image.FORMAT_RGBA8)
@@ -57,6 +59,7 @@ func _physics_process(delta):
 func _on_click_area_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if not is_collected:
+			print("Particle clicked!")  # Debug
 			start_moving_to_collector()
 
 func start_moving_to_collector() -> void:
@@ -70,6 +73,9 @@ func start_moving_to_collector() -> void:
 	var collector = get_node_or_null("/root/Main/ParticleCollector")
 	if collector:
 		target_position = collector.global_position
+		print("Particle moving to collector at: ", target_position)  # Debug
+	else:
+		print("ERROR: Could not find ParticleCollector!")
 	
 	# Disable physics collision while moving
 	set_collision_layer_value(1, false)
@@ -83,6 +89,7 @@ func apply_initial_impulse(impulse: Vector2) -> void:
 	apply_central_impulse(impulse)
 
 func collect() -> void:
+	print("Particle collected! Value: ", value)  # Debug
 	game_manager.add_energy(value)
 	
 	# Particle collection effect
@@ -94,11 +101,8 @@ func collect() -> void:
 
 func _on_lifetime_timeout() -> void:
 	if not is_collected:
+		print("Particle lifetime expired")  # Debug
 		# Fade out and disappear
 		var tween = create_tween()
 		tween.tween_property(sprite, "modulate:a", 0.0, 1.0)
 		tween.tween_callback(queue_free)
-
-
-func _on_particle_clicked(particle: RigidBody2D) -> void:
-	pass # Replace with function body.

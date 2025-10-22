@@ -13,9 +13,12 @@ script = ExtResource("1_7mycd")
 [node name="GameManager" parent="." instance=ExtResource("2_272bh")]
 
 [node name="CameraController" parent="." instance=ExtResource("3_5vw27")]
+position = Vector2(576, 324)
 
 [node name="Wizard" parent="." instance=ExtResource("4_kek77")]
+position = Vector2(400, 200)
 
 [node name="ParticleCollector" parent="." instance=ExtResource("5_4c57u")]
+position = Vector2(400, 500)
 
 [node name="UIManager" parent="." instance=ExtResource("6_efxa6")]

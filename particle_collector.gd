@@ -12,16 +12,16 @@ func _ready():
 	game_manager = get_node("/root/Main/GameManager")
 	collection_area.body_entered.connect(_on_body_entered)
 	
-	# Setup placeholder sprite
-	if not sprite:
-		sprite = Sprite2D.new()
-		add_child(sprite)
+	# Setup placeholder sprite if no texture
+	if not sprite.texture:
 		_create_placeholder_texture()
 	
 	# Update collection radius based on upgrades
 	if game_manager:
 		game_manager.upgrade_applied.connect(_on_upgrade_applied)
 		_update_collection_radius()
+	
+	print("ParticleCollector ready at: ", global_position)
 
 func _create_placeholder_texture() -> void:
 	# Create a bucket/basket shape
@@ -47,6 +47,7 @@ func _create_placeholder_texture() -> void:
 	sprite.offset.y = -60  # Center the bucket
 
 func _on_body_entered(body: Node2D) -> void:
+	print("Body entered collector area: ", body.name)  # Debug
 	if body.has_method("start_moving_to_collector"):
 		body.start_moving_to_collector()
 
@@ -57,6 +58,7 @@ func _on_upgrade_applied(upgrade_id: String) -> void:
 func _update_collection_radius() -> void:
 	if collection_shape and collection_shape.shape is CircleShape2D:
 		collection_shape.shape.radius = game_manager.collection_radius
+		print("Collection radius updated to: ", game_manager.collection_radius)
 
 func get_collection_position() -> Vector2:
 	return global_position

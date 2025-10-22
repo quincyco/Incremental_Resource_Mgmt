@@ -5,7 +5,7 @@ signal rock_clicked(click_position: Vector2)
 @export var particle_scene: PackedScene
 @onready var sprite = $Sprite2D
 @onready var click_area = $Area2D
-@onready var animation_player = $AnimationPlayer
+@onready var animation_player = $AnimationPlayer if has_node("AnimationPlayer") else null
 
 var game_manager: Node
 
@@ -14,9 +14,7 @@ func _ready():
 	click_area.input_event.connect(_on_click_area_input_event)
 	
 	# Setup placeholder sprite
-	if not sprite:
-		sprite = Sprite2D.new()
-		add_child(sprite)
+	if not sprite.texture:
 		_create_placeholder_texture()
 
 func _create_placeholder_texture() -> void:
@@ -38,6 +36,8 @@ func _on_click_area_input_event(_viewport, event, _shape_idx):
 		_on_rock_clicked()
 
 func _on_rock_clicked() -> void:
+	print("Rock clicked!")  # Debug
+	
 	# Play hit animation (if available)
 	if animation_player and animation_player.has_animation("hit"):
 		animation_player.play("hit")
@@ -55,9 +55,15 @@ func _play_simple_bounce() -> void:
 
 func spawn_particles() -> void:
 	if not particle_scene:
-		particle_scene = preload("res://Particle.tscn")
+		# CRITICAL FIX: lowercase 'p' in particle.tscn
+		particle_scene = load("res://particle.tscn")
+	
+	if not particle_scene:
+		print("ERROR: Could not load particle scene!")
+		return
 	
 	var num_particles = game_manager.particles_per_click
+	print("Spawning ", num_particles, " particles")  # Debug
 	
 	for i in range(num_particles):
 		var particle = particle_scene.instantiate()

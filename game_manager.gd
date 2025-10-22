@@ -22,9 +22,13 @@ var upgrades = {
 
 func _ready():
 	load_game_state()
+	# CRITICAL FIX: Emit initial energy to update UI
+	energy_changed.emit(total_energy)
+	print("GameManager ready. Initial energy: ", total_energy)
 
 func add_energy(amount: int) -> void:
 	total_energy += amount
+	print("Energy added: +", amount, " Total: ", total_energy)  # Debug
 	energy_changed.emit(total_energy)
 	particle_collected.emit(amount)
 
@@ -35,6 +39,7 @@ func can_afford_upgrade(upgrade_id: String) -> bool:
 
 func apply_upgrade(upgrade_id: String) -> bool:
 	if not can_afford_upgrade(upgrade_id):
+		print("Cannot afford upgrade: ", upgrade_id)
 		return false
 	
 	var upgrade = upgrades[upgrade_id]
@@ -46,12 +51,16 @@ func apply_upgrade(upgrade_id: String) -> bool:
 	match upgrade_id:
 		"more_particles":
 			particles_per_click += 2
+			print("Upgraded particles per click to: ", particles_per_click)
 		"particle_value":
 			particle_value += 1
+			print("Upgraded particle value to: ", particle_value)
 		"collection_radius":
 			collection_radius += 25.0
+			print("Upgraded collection radius to: ", collection_radius)
 		"auto_collector":
 			auto_collectors += 1
+			print("Added auto collector. Total: ", auto_collectors)
 	
 	energy_changed.emit(total_energy)
 	upgrade_applied.emit(upgrade_id)
@@ -83,14 +92,3 @@ func save_game_state() -> void:
 func load_game_state() -> void:
 	# TODO: Implement actual load from file
 	print("Game loaded (placeholder)")
-
-func _on_energy_changed(new_energy: int) -> void:
-	pass # Replace with function body.
-
-
-func _on_particle_collected(value: int) -> void:
-	pass # Replace with function body.
-
-
-func _on_upgrade_applied(upgrade_id: String) -> void:
-	pass # Replace with function body.
