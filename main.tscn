@@ -1,0 +1,21 @@
+[gd_scene load_steps=7 format=3 uid="uid://kmmn62bm6lkm"]
+
+[ext_resource type="Script" uid="uid://bpwae360iqs4o" path="res://main.gd" id="1_7mycd"]
+[ext_resource type="PackedScene" uid="uid://bhuilj74oym07" path="res://game_manager.tscn" id="2_272bh"]
+[ext_resource type="PackedScene" uid="uid://niqylqyqammy" path="res://camera_controller.tscn" id="3_5vw27"]
+[ext_resource type="PackedScene" uid="uid://caregkch5adu3" path="res://wizard.tscn" id="4_kek77"]
+[ext_resource type="PackedScene" uid="uid://dunomh34ragg4" path="res://particle_collector.tscn" id="5_4c57u"]
+[ext_resource type="PackedScene" uid="uid://c71kqfqa014kq" path="res://ui_manager.tscn" id="6_efxa6"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_7mycd")
+
+[node name="GameManager" parent="." instance=ExtResource("2_272bh")]
+
+[node name="CameraController" parent="." instance=ExtResource("3_5vw27")]
+
+[node name="Wizard" parent="." instance=ExtResource("4_kek77")]
+
+[node name="ParticleCollector" parent="." instance=ExtResource("5_4c57u")]
+
+[node name="UIManager" parent="." instance=ExtResource("6_efxa6")]

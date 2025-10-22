@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckyv0wn717ie6"]
+
+[ext_resource type="Script" uid="uid://cpk6ljulh38fo" path="res://particle.gd" id="1_kgu82"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qa6nv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kgu82"]
+
+[node name="Particle" type="RigidBody2D"]
+script = ExtResource("1_kgu82")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qa6nv")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_kgu82")
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+
+[connection signal="particle_clicked" from="." to="." method="_on_particle_clicked"]

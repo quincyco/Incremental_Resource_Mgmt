@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhuilj74oym07"]
+
+[ext_resource type="Script" uid="uid://kjg6argbjis7" path="res://game_manager.gd" id="1_70yv6"]
+
+[node name="GameManager" type="Node"]
+script = ExtResource("1_70yv6")
+
+[connection signal="energy_changed" from="." to="." method="_on_energy_changed"]
+[connection signal="particle_collected" from="." to="." method="_on_particle_collected"]
+[connection signal="upgrade_applied" from="." to="." method="_on_upgrade_applied"]

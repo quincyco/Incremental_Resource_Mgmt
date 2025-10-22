@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dunomh34ragg4"]
+
+[ext_resource type="Script" uid="uid://dw4h8rj6553j1" path="res://particle_collector.gd" id="1_u1fo2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e8b77"]
+
+[node name="ParticleCollector" type="Node2D"]
+script = ExtResource("1_u1fo2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_e8b77")
