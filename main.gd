@@ -11,3 +11,4 @@ func _ready():
 	ui_manager.upgrade_purchased.connect(game_manager.apply_upgrade)
 	
 	print("Wizard Beater initialized!")
+	print("Beat up the wizard and collect his magical particles!")

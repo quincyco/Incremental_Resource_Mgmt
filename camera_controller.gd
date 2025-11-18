@@ -11,6 +11,12 @@ var is_panning: bool = false
 var pan_start_position: Vector2
 var camera_start_position: Vector2
 
+# Screen shake
+var shake_intensity: float = 0.0
+var shake_duration: float = 0.0
+var shake_timer: float = 0.0
+var base_offset: Vector2 = Vector2.ZERO
+
 func _ready():
 	zoom = Vector2(1.0, 1.0)
 	target_zoom = 1.0
@@ -46,7 +52,18 @@ func _process(delta):
 	var current_zoom = zoom.x
 	current_zoom = lerp(current_zoom, target_zoom, smooth_speed * delta)
 	zoom = Vector2(current_zoom, current_zoom)
-	
+
+	# Screen shake
+	if shake_timer > 0:
+		shake_timer -= delta
+		var shake_amount = shake_intensity * (shake_timer / shake_duration)
+		offset = Vector2(
+			randf_range(-shake_amount, shake_amount),
+			randf_range(-shake_amount, shake_amount)
+		)
+	else:
+		offset = Vector2.ZERO
+
 	# Keyboard panning
 	var pan_direction = Vector2.ZERO
 	if Input.is_action_pressed("ui_left"):
@@ -57,7 +74,7 @@ func _process(delta):
 		pan_direction.y -= 1
 	if Input.is_action_pressed("ui_down"):
 		pan_direction.y += 1
-	
+
 	if pan_direction != Vector2.ZERO:
 		position += pan_direction.normalized() * pan_speed * delta / zoom.x
 
@@ -71,3 +88,8 @@ func reset_camera() -> void:
 	tween.tween_property(self, "position", Vector2.ZERO, 0.5)
 	tween.tween_property(self, "zoom", Vector2.ONE, 0.5)
 	target_zoom = 1.0
+
+func apply_shake(intensity: float, duration: float) -> void:
+	shake_intensity = intensity
+	shake_duration = duration
+	shake_timer = duration
